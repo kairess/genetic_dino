@@ -18,6 +18,7 @@ class Game():
     self.population = self.generation.population
 
     self.gamespeed = 4
+    self.max_gamespeed = 10
     self.high_score = 0
     self.n_gen = 0
     self.current_gen_score = 0
@@ -218,7 +219,7 @@ class Game():
     self.clock.tick(FPS)
 
     # make faster
-    if self.counter % 70 == 69:
+    if self.counter % 70 == 69 and self.gamespeed < 10:
       self.new_ground.speed -= 0.05
       self.gamespeed += 0.05
 
@@ -243,7 +244,7 @@ class Game():
       obs_distance, obs_top, obs_bottom = width, 0, 0
       dino_rect_right = dino_position + 40
       for obs in self.all_obstacles:
-        this_obs_distance = obs.rect.centerx - dino_rect_right
+        this_obs_distance = obs.rect.left - dino_position
 
         if this_obs_distance > 0 and this_obs_distance < obs_distance:
           obs_distance = this_obs_distance
@@ -264,21 +265,24 @@ class Game():
         self.n_survivors += 1
 
         # decide action
-        inputs = np.array([obs_distance / 10, obs_top / 10, obs_bottom / 10, self.gamespeed
+        inputs = np.array([
+          obs_distance / width,
+          obs_top / height,
+          (self.gamespeed - 4.) / self.max_gamespeed * 10. / 6.
         ], dtype=np.float32)
         outputs = self.genomes[di].forward(inputs)[0]
         # print(inputs, outputs)
 
         # execute action
-        if outputs < 0.1: # jump
+        if outputs < 0: # do nothing
+          dino.isDucking = False
+        elif outputs < 0.5: # duck
+          if not dino.isJumping and not dino.isDead:
+            dino.isDucking = True
+        else: # jump
           if dino.rect.bottom == int(0.98*height):
             dino.isJumping = True
             dino.movement[1] = -dino.jumpSpeed
-        elif outputs < 0.2: # duck
-          if not dino.isJumping and not dino.isDead:
-            dino.isDucking = True
-        else: # do nothing
-          dino.isDucking = False
 
         self.current_gen_score = dino.score
 

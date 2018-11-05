@@ -20,7 +20,7 @@ class Dino(pygame.sprite.Sprite):
     self.isDucking = False
     self.isBlinking = False
     self.movement = [0,0]
-    self.jumpSpeed = 11.5
+    self.jumpSpeed = 11
 
     self.fitness = 0
 
@@ -107,7 +107,7 @@ class Ptera(pygame.sprite.Sprite):
   def __init__(self,speed=5,sizex=-1,sizey=-1, screen=None):
     pygame.sprite.Sprite.__init__(self,self.containers)
     self.images,self.rect = load_sprite_sheet('ptera.png',2,1,sizex,sizey,-1)
-    self.ptera_height = [height*0.75, height*0.40]
+    self.ptera_height = [height*0.82, height*0.55]
     self.rect.centery = self.ptera_height[random.randrange(0,2)]
     self.rect.left = width + self.rect.width
     self.image = self.images[0]

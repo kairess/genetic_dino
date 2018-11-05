@@ -22,11 +22,11 @@ class Generation():
     self.genomes.sort(key=lambda x: x.fitness, reverse=True)
     self.best_genomes = self.genomes[:self.keep_best]
 
-    self.lucky_genomes = random.sample(self.genomes, k=self.lucky_few)
+    # self.lucky_genomes = random.sample(self.genomes, k=self.lucky_few)
 
-    self.best_genomes.extend(self.lucky_genomes)
+    # self.best_genomes.extend(self.lucky_genomes)
 
-    self.genomes = self.best_genomes[:]
+    self.genomes = copy.deepcopy(self.best_genomes[:])
 
   def mutations(self):
     while len(self.genomes) < self.keep_best * 4:
@@ -62,7 +62,7 @@ class Generation():
   def mutate_weights(self, weights):
     # print(weights)
     if random.uniform(0, 1) < self.chance_of_mutation:
-      return weights * (random.uniform(0, 1) - 0.5) * 3 + (random.uniform(0, 1) - 0.5)
+      return weights * (random.uniform(0, 0.5) - 0.25) + (random.uniform(0, 0.5) - 0.25)
     else:
       return 0
 
