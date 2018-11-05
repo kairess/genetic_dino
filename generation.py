@@ -62,7 +62,7 @@ class Generation():
   def mutate_weights(self, weights):
     # print(weights)
     if random.uniform(0, 1) < self.chance_of_mutation:
-      return weights * (random.uniform(0, 0.5) - 0.25) + (random.uniform(0, 0.5) - 0.25)
+      return weights * (random.uniform(0, 1) - 0.5) * 3 + (random.uniform(0, 1) - 0.5)
     else:
       return 0
 

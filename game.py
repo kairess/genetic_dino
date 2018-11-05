@@ -267,8 +267,7 @@ class Game():
         # decide action
         inputs = np.array([
           obs_distance / width,
-          obs_top / height,
-          (self.gamespeed - 4.) / self.max_gamespeed * 10. / 6.
+          obs_top / height
         ], dtype=np.float32)
         outputs = self.genomes[di].forward(inputs)[0]
         # print(inputs, outputs)
